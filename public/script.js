@@ -1,4 +1,4 @@
-// Referensi UI Elements
+// Referensi Elemen UI
 const ui = {
     inputView: document.getElementById('view-input'),
     loadingView: document.getElementById('view-loading'),
@@ -9,19 +9,17 @@ const ui = {
     finalDownloadBtn: document.getElementById('finalDownloadBtn'),
     resetBtn: document.getElementById('resetBtn'),
     
-    // Result Elements
+    // Elemen Hasil
     img: document.getElementById('albumArt'),
     title: document.getElementById('trackTitle'),
-    artist: document.getElementById('artistName'),
-    duration: document.getElementById('durationTxt'),
-    size: document.getElementById('sizeTxt')
+    artist: document.getElementById('artistName')
 };
 
 // Variabel Global
 let currentDownloadUrl = "";
 let currentFileName = "music.mp3";
 
-// Fungsi Ganti Tampilan
+// Fungsi Navigasi Tampilan
 function showView(viewName) {
     ui.inputView.classList.add('hidden');
     ui.loadingView.classList.add('hidden');
@@ -32,7 +30,7 @@ function showView(viewName) {
     if (viewName === 'result') ui.resultView.classList.remove('hidden');
 }
 
-// 1. EVENT: SEARCH BUTTON
+// 1. EVENT: KLIK TOMBOL CARI/DOWNLOAD AWAL
 ui.searchBtn.addEventListener('click', async () => {
     const url = ui.urlInput.value.trim();
     
@@ -44,94 +42,88 @@ ui.searchBtn.addEventListener('click', async () => {
     showView('loading');
 
     try {
+        // --- REQUEST KE BACKEND (api/index.js) ---
         const response = await fetch('/api', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ url: url })
         });
         
-        const rawData = await response.json();
+        const data = await response.json();
 
-        if (response.ok) {
-            // --- LOGIKA CERDAS MENCARI DATA (PERBAIKAN) ---
+        // Cek jika status dari backend true
+        // Backend Anda mengembalikan: { status: true, title: "...", artist: "...", cover: "...", download_url: "..." }
+        if (response.ok && data.status === true) {
             
-            // 1. Normalisasi: Kadang API membungkus data dalam 'data', 'result', atau 'metadata'
-            let data = rawData;
-            if (rawData.data) data = rawData.data;
-            else if (rawData.result) data = rawData.result;
-            else if (rawData.metadata) data = rawData.metadata;
-
-            console.log("Track Data:", data); // Debug di console jika masih error
-
-            // 2. Ambil URL Cover (Cek berbagai kemungkinan nama key)
-            const coverUrl = data.cover || data.image || data.thumbnail || data.album_art || "";
-            
-            if (coverUrl) {
-                ui.img.src = coverUrl;
+            // --- 1. SET GAMBAR (COVER) ---
+            if (data.cover) {
+                ui.img.src = data.cover;
                 ui.img.style.display = 'block';
             } else {
-                ui.img.src = "https://via.placeholder.com/180?text=No+Cover";
+                ui.img.src = 'https://via.placeholder.com/180?text=No+Cover';
             }
 
-            // 3. Ambil Judul & Artis (Cek berbagai kemungkinan nama key)
-            ui.title.innerText = data.title || data.name || data.song || "Unknown Title";
-            ui.artist.innerText = data.artist || data.author || "Unknown Artist";
+            // --- 2. SET JUDUL DAN ARTIS ---
+            // Mengambil langsung dari key backend Anda
+            ui.title.innerText = data.title || "Unknown Title";
+            ui.artist.innerText = data.artist || "Unknown Artist";
             
-            // 4. Ambil Meta info
-            ui.duration.innerText = data.duration || "03:00";
-            ui.size.innerText = data.size || "High Q";
-
-            // 5. Siapkan Link Download (Direct)
-            currentDownloadUrl = data.download_url || data.link || data.url;
+            // --- 3. SIAPKAN LINK DOWNLOAD ---
+            currentDownloadUrl = data.download_url;
             
-            // Buat nama file bersih
+            // Buat nama file bersih untuk download nanti
             const safeTitle = (data.title || "audio").replace(/[^a-z0-9]/gi, '_');
-            currentFileName = `${safeTitle}.mp3`;
+            const safeArtist = (data.artist || "").replace(/[^a-z0-9]/gi, '_');
+            currentFileName = `${safeArtist} - ${safeTitle}.mp3`;
 
+            // Tampilkan hasil
             showView('result');
 
         } else {
-            throw new Error(rawData.error || "Failed to fetch data");
+            // Jika backend mengirim status: false atau error
+            throw new Error(data.message || data.error || "Failed to process track");
         }
     } catch (error) {
-        alert("Error: " + error.message);
+        console.error(error);
+        alert("Gagal memproses link. Pastikan link Spotify valid.");
         showView('input');
     }
 });
 
-// 2. EVENT: DOWNLOAD BUTTON (Direct Download Logic)
+// 2. EVENT: KLIK TOMBOL DOWNLOAD FINAL (Direct Download)
 ui.finalDownloadBtn.addEventListener('click', (e) => {
-    e.preventDefault();
+    // Mencegah redirect halaman
+    e.preventDefault(); 
 
     if (!currentDownloadUrl) {
-        alert("Download link not ready yet.");
+        alert("Link download belum siap.");
         return;
     }
 
-    // Teknik Direct Download tanpa Redirect
+    // Trik download otomatis tanpa pindah tab
     const link = document.createElement('a');
     link.href = currentDownloadUrl;
-    link.setAttribute('download', currentFileName);
+    link.setAttribute('download', currentFileName); // Suggest nama file
+    link.target = "_self"; // Paksa di tab yang sama
     link.style.display = 'none';
-    link.target = "_self"; // Memaksa tetap di halaman yang sama
 
     document.body.appendChild(link);
     link.click();
     
-    // Bersihkan elemen link setelah klik
+    // Hapus elemen link setelah diklik
     setTimeout(() => {
         document.body.removeChild(link);
     }, 100);
 });
 
-// Handler Reset
+// Fitur Reset
 ui.resetBtn.addEventListener('click', () => {
     ui.urlInput.value = '';
     ui.img.src = '';
     showView('input');
 });
 
-// Enter Key
+// Support tombol Enter
 ui.urlInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') ui.searchBtn.click();
 });
