@@ -22,7 +22,6 @@ body {
     position: relative;
 }
 
-/* Background Grid Pattern */
 .grid-bg {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -41,7 +40,6 @@ body {
     gap: 25px;
 }
 
-/* --- MAIN CARD --- */
 .downloader-card {
     background: var(--card-bg);
     width: 100%;
@@ -54,19 +52,16 @@ body {
     overflow: hidden;
 }
 
-/* Header */
 .header { margin-bottom: 30px; }
 .header i { font-size: 50px; color: var(--primary); margin-bottom: 10px; }
 .header h2 { font-size: 28px; font-weight: 700; }
 .header h2 span { color: var(--primary); }
 .header p { color: var(--text-gray); font-size: 13px; margin-top: 5px; }
 
-/* View Switching Utility */
 .hidden { display: none !important; }
 .fade-in { animation: fadeIn 0.3s ease-in; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-/* Input Styling */
 .input-box {
     background: #2a2a2a;
     border-radius: 12px;
@@ -84,7 +79,6 @@ body {
     color: white; flex: 1; font-size: 15px;
 }
 
-/* Button Styling */
 .action-btn {
     width: 100%;
     background: var(--primary);
@@ -103,7 +97,6 @@ body {
 }
 .action-btn:hover { background: var(--primary-dark); transform: scale(1.02); }
 
-/* --- RESULT CARD STYLING --- */
 .track-card { animation: fadeIn 0.4s; }
 .track-card img {
     width: 180px; height: 180px;
@@ -137,7 +130,6 @@ body {
 .reset-area { margin-top: 15px; }
 #resetBtn { background: none; border: none; color: var(--text-gray); text-decoration: underline; cursor: pointer; }
 
-/* --- LOADING ANIMATION --- */
 .loader-container { padding: 40px 0; }
 .spotify-pulse {
     width: 50px; height: 50px; background: var(--primary);
@@ -151,7 +143,6 @@ body {
     100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(29, 185, 84, 0); }
 }
 
-/* --- BADGES / FEATURES --- */
 .features-grid {
     display: flex; justify-content: space-between;
     width: 100%; gap: 10px;
@@ -169,7 +160,6 @@ body {
 }
 .feature-item span { font-size: 10px; color: var(--text-gray); font-weight: 600; text-transform: uppercase; }
 
-/* --- DOCUMENTATION --- */
 .documentation-section {
     width: 100%; background: #1a1a1a;
     padding: 20px; border-radius: 15px;
@@ -186,7 +176,6 @@ body {
 }
 .step p { font-size: 13px; color: #ccc; }
 
-/* FOOTER */
 .footer {
     color: #444; font-size: 11px; font-weight: 700; letter-spacing: 2px;
     margin-top: 10px;
