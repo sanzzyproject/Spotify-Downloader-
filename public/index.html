@@ -41,7 +41,7 @@
 
             <div id="view-result" class="hidden">
                 <div class="track-card">
-                    <img id="albumArt" src="" alt="Album Art" onerror="this.style.display='none'">
+                    <img id="albumArt" src="" alt="Album Art">
                     
                     <div class="track-details">
                         <h3 id="trackTitle">Title</h3>
@@ -53,9 +53,9 @@
                         <span class="tag green-tag"><i class="fas fa-database"></i> <span id="sizeTxt">-- MB</span></span>
                     </div>
 
-                    <a id="dlLink" href="#" target="_blank" class="download-confirm-btn">
+                    <button id="dlLink" class="download-confirm-btn" style="width: 100%; border: none; cursor: pointer;">
                         <i class="fas fa-download"></i> Download MP3
-                    </a>
+                    </button>
                     
                     <div class="reset-area">
                         <button id="resetBtn">Download another</button>
