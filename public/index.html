@@ -8,93 +8,69 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="spotify-container">
-        <div class="sidebar">
-            <div class="logo">
-                <i class="fab fa-spotify"></i>
-                <span>SpotifyDl</span>
-            </div>
-            
-            <ul class="nav-links">
-                <li class="active"><i class="fas fa-home"></i> <span>Home</span></li>
-                <li><i class="fas fa-search"></i> <span>Search</span></li>
-                <li><i class="fas fa-book"></i> <span>Your Library</span></li>
-            </ul>
+    <div class="bg-decoration">
+        <i class="fas fa-music"></i>
+        <i class="fas fa-headphones-alt"></i>
+        <i class="fab fa-spotify"></i>
+        <i class="fas fa-record-vinyl"></i>
+    </div>
 
-            <div class="sidebar-divider"></div>
+    <div class="main-container">
+        <div class="card">
+            <div id="inputView" class="view-section">
+                <div class="logo-section">
+                    <i class="fab fa-spotify logo-icon"></i>
+                    <h1>Spotify <span>Downloader</span></h1>
+                    <p>High-quality MP3 streaming & download</p>
+                </div>
+                
+                <div class="input-group">
+                    <i class="fas fa-link link-icon"></i>
+                    <input type="text" id="spotifyUrl" placeholder="Paste Spotify track link...">
+                </div>
 
-            <ul class="nav-links scrollable">
-                <li><div class="playlist-box"><i class="fas fa-plus-square"></i> <span>Create Playlist</span></div></li>
-                <li><div class="playlist-box"><i class="fas fa-heart"></i> <span>Liked Songs</span></div></li>
-            </ul>
-            
-            <div class="legal">
-                <span>Cookies</span>
-                <span>Privacy</span>
+                <button id="downloadBtn" class="main-btn">
+                    <i class="fas fa-bolt"></i> Download Music
+                </button>
             </div>
+
+            <div id="resultView" class="view-section hidden">
+                <div class="logo-section-small">
+                    <i class="fab fa-spotify logo-icon-small"></i>
+                    <h2>Spotify <span>Downloader</span></h2>
+                </div>
+
+                <div class="track-info-card">
+                    <img id="albumArt" src="" alt="Album Art" class="album-cover">
+                    <h3 id="trackTitle">Track Title</h3>
+                    <p id="artistName">Artist Name</p>
+                    
+                    <div class="meta-badges">
+                        <span class="badge-pill"><i class="far fa-clock"></i> <span id="durationTxt">N/A</span></span>
+                        <span class="badge-pill badge-green"><i class="far fa-file-audio"></i> <span id="sizeTxt">N/A</span></span>
+                    </div>
+                </div>
+
+                <a id="dlLink" href="#" target="_blank" class="main-btn download-btn">
+                    <i class="fas fa-download"></i> Download MP3
+                </a>
+
+                <button id="resetBtn" class="text-btn">Download another</button>
+            </div>
+
+            <div id="loadingView" class="view-section hidden">
+                 <div class="logo-section">
+                    <i class="fab fa-spotify logo-icon pulse"></i>
+                    <h2>Processing...</h2>
+                    <p>Please wait while we fetch your track.</p>
+                </div>
+            </div>
+
         </div>
 
-        <div class="main-content">
-            <div class="top-bar">
-                <div class="nav-arrows">
-                    <div class="arrow-circle"><i class="fas fa-chevron-left"></i></div>
-                    <div class="arrow-circle"><i class="fas fa-chevron-right"></i></div>
-                </div>
-                <div class="user-actions">
-                    <button class="pill-btn">Explore Premium</button>
-                    <div class="profile-icon"><i class="far fa-user"></i></div>
-                </div>
-            </div>
-
-            <div class="content-scroll">
-                <div class="hero-section">
-                    <h1>Download Music</h1>
-                    <div class="search-container">
-                        <i class="fas fa-search search-icon"></i>
-                        <input type="text" id="spotifyUrl" placeholder="Paste Spotify link here (Track, Playlist)...">
-                        <button id="downloadBtn" class="play-btn">GO</button>
-                    </div>
-                </div>
-
-                <div id="resultArea" class="result-section hidden">
-                    <h2>Best Result</h2>
-                    <div class="track-card">
-                        <img id="albumArt" src="" alt="Album Art">
-                        <div class="track-info">
-                            <h3 id="trackTitle">Track Title</h3>
-                            <p id="artistName">Artist Name</p>
-                            <div class="badges">
-                                <span class="badge">SONG</span>
-                            </div>
-                            <a id="dlLink" href="#" target="_blank" class="spotify-btn">
-                                Download MP3
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="recommendations">
-                    <h2>Made for you</h2>
-                    <div class="card-grid">
-                        <div class="music-card">
-                            <div class="img-placeholder" style="background: #535353;"></div>
-                            <h4>Daily Mix 1</h4>
-                            <p>Just for you</p>
-                        </div>
-                        <div class="music-card">
-                            <div class="img-placeholder" style="background: #535353;"></div>
-                            <h4>Discover Weekly</h4>
-                            <p>New music</p>
-                        </div>
-                        <div class="music-card">
-                            <div class="img-placeholder" style="background: #535353;"></div>
-                            <h4>Top Hits</h4>
-                            <p>Global</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <footer class="credit-footer">
+            <p>SANN404 FORUM</p>
+        </footer>
     </div>
 
     <script src="script.js"></script>
