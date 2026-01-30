@@ -1,11 +1,12 @@
-// Referensi UI
+// Referensi UI Elements
 const ui = {
     inputView: document.getElementById('view-input'),
     loadingView: document.getElementById('view-loading'),
     resultView: document.getElementById('view-result'),
     
     urlInput: document.getElementById('spotifyUrl'),
-    downloadBtn: document.getElementById('downloadBtn'),
+    searchBtn: document.getElementById('searchBtn'), // Tombol Cari
+    finalDownloadBtn: document.getElementById('finalDownloadBtn'), // Tombol Download Akhir
     resetBtn: document.getElementById('resetBtn'),
     
     // Result Elements
@@ -13,11 +14,10 @@ const ui = {
     title: document.getElementById('trackTitle'),
     artist: document.getElementById('artistName'),
     duration: document.getElementById('durationTxt'),
-    size: document.getElementById('sizeTxt'),
-    linkBtn: document.getElementById('dlLink') // Menggunakan button ID
+    size: document.getElementById('sizeTxt')
 };
 
-// Global variable untuk menyimpan URL download
+// Variabel untuk menyimpan URL download sementara
 let currentDownloadUrl = "";
 let currentFileName = "music.mp3";
 
@@ -32,25 +32,8 @@ function showView(viewName) {
     if (viewName === 'result') ui.resultView.classList.remove('hidden');
 }
 
-// FUNGSI UTAMA: Download Otomatis tanpa redirect
-async function triggerDownload(url, filename) {
-    try {
-        const response = await fetch(url);
-        const blob = await response.blob();
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    } catch (e) {
-        // Fallback jika terjadi CORS error pada fetch langsung
-        window.location.href = url;
-    }
-}
-
-// Handler Tombol Download Utama
-ui.downloadBtn.addEventListener('click', async () => {
+// 1. EVENT: Saat Tombol "Download Music" (Search) Ditekan
+ui.searchBtn.addEventListener('click', async () => {
     const url = ui.urlInput.value.trim();
     
     if (!url) {
@@ -61,7 +44,7 @@ ui.downloadBtn.addEventListener('click', async () => {
     showView('loading');
 
     try {
-        // --- FETCH KE BACKEND ---
+        // --- FETCH KE BACKEND (JANGAN DIUBAH) ---
         const response = await fetch('/api', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -71,31 +54,33 @@ ui.downloadBtn.addEventListener('click', async () => {
         const data = await response.json();
 
         if (response.ok) {
-            // --- UPDATE DATA KE UI SESUAI GAMBAR ---
+            // --- UPDATE DATA KE UI (WAJIB MUNCUL SESUAI GAMBAR) ---
             
-            // 1. Tampilkan Foto/Album Art
+            // 1. Update Gambar Album
             if (data.cover) {
                 ui.img.src = data.cover;
                 ui.img.style.display = 'block';
             } else {
-                ui.img.style.display = 'none';
+                // Fallback image jika tidak ada cover
+                ui.img.src = "https://via.placeholder.com/180?text=No+Cover"; 
             }
 
-            // 2. Tampilkan Nama Artis & Judul
+            // 2. Update Teks (Judul, Artis, dll)
             ui.title.innerText = data.title || "Unknown Title";
             ui.artist.innerText = data.artist || "Unknown Artist";
-            
-            // 3. Tampilkan Metadata (Durasi & Size)
-            ui.duration.innerText = data.duration || "N/A";
-            ui.size.innerText = data.size || "5.05 MB"; // Data size muncul disini
-            
-            // Simpan URL dan Nama File untuk tombol download konfirmasi
-            currentDownloadUrl = data.download_url;
-            currentFileName = `${data.title || 'music'}.mp3`;
+            ui.duration.innerText = data.duration || "03:00";
+            ui.size.innerText = data.size || "5.0 MB";
 
+            // 3. Simpan Link Download ke Variabel Global
+            currentDownloadUrl = data.download_url;
+            // Buat nama file aman untuk didownload
+            currentFileName = `${data.artist} - ${data.title}.mp3`.replace(/[^a-z0-9 \.-]/gi, '');
+
+            // 4. Tampilkan Hasil
             showView('result');
+
         } else {
-            throw new Error(data.error || "Failed to process");
+            throw new Error(data.error || "Failed to process track");
         }
     } catch (error) {
         alert("Error: " + error.message);
@@ -103,23 +88,42 @@ ui.downloadBtn.addEventListener('click', async () => {
     }
 });
 
-// Handler Tombol Konfirmasi Download (Memicu Download Langsung)
-ui.linkBtn.addEventListener('click', () => {
-    if(currentDownloadUrl) {
-        triggerDownload(currentDownloadUrl, currentFileName);
+// 2. EVENT: Saat Tombol "Download MP3" Ditekan (DIRECT DOWNLOAD)
+ui.finalDownloadBtn.addEventListener('click', (e) => {
+    e.preventDefault(); // Mencegah perilaku default
+
+    if (!currentDownloadUrl) {
+        alert("Download link not found!");
+        return;
     }
+
+    // --- LOGIKA DIRECT DOWNLOAD TANPA REDIRECT ---
+    // Cara kerja: Membuat elemen <a> tersembunyi, set atribut download, lalu klik otomatis
+    const link = document.createElement('a');
+    link.href = currentDownloadUrl;
+    link.setAttribute('download', currentFileName); // Memaksa browser mendownload file
+    link.style.display = 'none';
+    
+    // Fallback: Jika atribut 'download' diblokir browser (cross-origin), 
+    // gunakan target="_self" untuk memaksa download di frame yang sama
+    link.target = "_self"; 
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 });
 
-// Handler Tombol Reset
+// Handler Tombol Reset (Download Another)
 ui.resetBtn.addEventListener('click', () => {
     ui.urlInput.value = '';
-    currentDownloadUrl = "";
+    ui.img.src = ''; // Clear image
     showView('input');
 });
 
 // Enter Key Support
 ui.urlInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') ui.downloadBtn.click();
+    if (e.key === 'Enter') ui.searchBtn.click();
 });
 
+// Inisialisasi awal
 showView('input');
