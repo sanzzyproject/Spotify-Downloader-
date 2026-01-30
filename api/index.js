@@ -32,8 +32,8 @@ async function spotifydl(url) {
         
         return {
             status: true,
-            title: meta.title || "Unknown Title",
-            artist: meta.artist || "Unknown Artist",
+            title: meta.title || "Music Siap Download",
+            artist: meta.artist || "Artist",
             cover: meta.cover || "",
             download_url: dl.url
         };
