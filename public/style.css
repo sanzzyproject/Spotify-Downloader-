@@ -22,6 +22,7 @@ body {
     position: relative;
 }
 
+/* Background Grid Pattern */
 .grid-bg {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -40,6 +41,7 @@ body {
     gap: 25px;
 }
 
+/* --- MAIN CARD --- */
 .downloader-card {
     background: var(--card-bg);
     width: 100%;
@@ -52,16 +54,19 @@ body {
     overflow: hidden;
 }
 
+/* Header */
 .header { margin-bottom: 30px; }
 .header i { font-size: 50px; color: var(--primary); margin-bottom: 10px; }
 .header h2 { font-size: 28px; font-weight: 700; }
 .header h2 span { color: var(--primary); }
 .header p { color: var(--text-gray); font-size: 13px; margin-top: 5px; }
 
+/* View Switching Utility */
 .hidden { display: none !important; }
 .fade-in { animation: fadeIn 0.3s ease-in; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+/* Input Styling */
 .input-box {
     background: #2a2a2a;
     border-radius: 12px;
@@ -79,6 +84,7 @@ body {
     color: white; flex: 1; font-size: 15px;
 }
 
+/* Button Styling */
 .action-btn {
     width: 100%;
     background: var(--primary);
@@ -97,19 +103,20 @@ body {
 }
 .action-btn:hover { background: var(--primary-dark); transform: scale(1.02); }
 
+/* --- RESULT CARD STYLING --- */
 .track-card { animation: fadeIn 0.4s; }
-.track-card img {
+.track-img {
     width: 180px; height: 180px;
-    border-radius: 10px;
+    border-radius: 15px; /* Sedikit lebih rounded sesuai gambar modern */
     object-fit: cover;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-    margin-bottom: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+    margin-bottom: 20px;
     display: block;
     margin-left: auto;
     margin-right: auto;
 }
-.track-details h3 { font-size: 20px; margin-bottom: 5px; color: white; }
-.track-details p { color: var(--text-gray); font-size: 14px; margin-bottom: 15px; }
+.track-details h3 { font-size: 20px; font-weight: 700; margin-bottom: 5px; color: white; }
+.track-details p { color: var(--text-gray); font-size: 14px; margin-bottom: 15px; font-weight: 500;}
 
 .meta-tags { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
 .tag {
@@ -122,7 +129,7 @@ body {
 .download-confirm-btn {
     display: flex; align-items: center; justify-content: center; gap: 10px;
     background: var(--primary); color: #000; text-decoration: none;
-    padding: 15px; border-radius: 50px; font-weight: 700;
+    padding: 15px; border-radius: 50px; font-weight: 700; font-size: 16px;
     transition: 0.2s;
 }
 .download-confirm-btn:hover { transform: scale(1.03); background: var(--primary-dark); }
@@ -130,6 +137,7 @@ body {
 .reset-area { margin-top: 15px; }
 #resetBtn { background: none; border: none; color: var(--text-gray); text-decoration: underline; cursor: pointer; }
 
+/* --- LOADING ANIMATION --- */
 .loader-container { padding: 40px 0; }
 .spotify-pulse {
     width: 50px; height: 50px; background: var(--primary);
@@ -143,6 +151,7 @@ body {
     100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(29, 185, 84, 0); }
 }
 
+/* --- FEATURES & DOCS (UNCHANGED) --- */
 .features-grid {
     display: flex; justify-content: space-between;
     width: 100%; gap: 10px;
